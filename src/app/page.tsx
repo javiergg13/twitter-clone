@@ -1,7 +1,20 @@
-export default function Home () {
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
+import { AuthButton } from './components/auth-button'
+
+export default async function Home() {
+  const supabase = createServerComponentClient({ cookies })
+  const { data: posts } = await supabase.from('posts').select()
+
   return (
-    <h1 className="flex min-h-screen flex-col items-center justify-between p-24">
-      Hola Twitter
-    </h1>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      Hola Twitter 👋
+      <AuthButton />
+      <pre>
+        {
+          JSON.stringify(posts, null, 2)
+        }
+      </pre>
+    </main>
   )
 }
